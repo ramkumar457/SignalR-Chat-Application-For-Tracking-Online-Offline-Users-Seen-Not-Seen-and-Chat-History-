@@ -1,0 +1,28 @@
+﻿@model IEnumerable<AspCoreMvcSingnalR.DatabaseEntity.User>
+@if (Model != null && Model.Any())
+{
+    foreach (var user in Model)
+    {
+        <div class="user" data-user-id="@user.UserId">
+            <i class="fa fa-user-circle-o" aria-hidden="true"></i> @user.FullName
+            @if(user.IsOnline)
+            {
+                <i class="fa fa-circle" style="color:green;font-size: 12px;" aria-hidden="true"></i>
+            }
+            else
+            {
+                <i class="fa fa-circle" style="color:red;font-size: 12px;" aria-hidden="true"></i>
+            }
+        </div>
+    }
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".user").click(function () {
+            var userId = $(this).data("user-id");
+            var userName = $(this).text();
+            $("#chat-window").slideDown();
+            LoadUserChatCobversion(userId);
+        });
+    });
+</script>

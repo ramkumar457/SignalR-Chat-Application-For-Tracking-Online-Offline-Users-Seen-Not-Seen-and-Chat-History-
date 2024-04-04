@@ -1,0 +1,86 @@
+﻿@model AspCoreMvcSingnalR.Controllers.ChatConversionModel
+@{
+    string loginUserId = ViewData["loginUserId"].ToString();
+}
+@if (Model != null && Model.ChatUser != null)
+{
+
+    <div class="chat-header">
+        <span class="close" id="close-chat">&times;</span>
+        <h4>
+            Chat with <span>
+                @Model.ChatUser.FullName
+                @if (Model.ChatUser.IsOnline)
+                {
+                    <i class="fa fa-circle" style="color:green;font-size: 12px;" aria-hidden="true"></i>
+                }
+                else
+                {
+                    <i class="fa fa-circle" style="color:red;font-size: 12px;" aria-hidden="true"></i>
+                }
+            </span>
+        </h4>
+    </div>
+    <div class="chat-body">
+        <ul class="chat-ui" data-userid="@Model.ChatUser.UserId" id="chatlist">
+            @if (Model.UserChatHistories?.Any() == true)
+            {
+                @foreach (var chat in Model.UserChatHistories)
+                {
+                    if (chat.SenderUserId.ToString() == loginUserId)
+                    {
+                        //sender is loggged in user then show message to right side
+                        <li class="right">
+                            <div class="text">
+                                <div class="user">
+                                    <i class="fa fa-user-circle-o" aria-hidden="true"></i> @chat.SenderUser.FullName
+                                </div>
+                                <small class="message">
+                                    @chat.Message
+                                    <br>
+                                    @if (chat.SeetAt != null)
+                                    {
+                                        <small style="font-size:8px">SeetAt: @chat.SeetAt.ToString()</small>
+                                    }
+                                    else
+                                    {
+                                        <small style="font-size:8px">Not seen</small>
+                                    }
+                                </small>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="left">
+                            <div class="text">
+                                <div class="user">
+                                    <i class="fa fa-user-circle-o" aria-hidden="true"></i> @chat.SenderUser.FullName
+                                </div>
+                                <small class="message">
+                                    @chat.Message
+                                    <br>
+                                    @if (chat.SeetAt != null)
+                                    {
+                                        <small style="font-size:8px">SeetAt: @chat.SeetAt.ToString()</small>
+                                    }
+                                    else
+                                    {
+                                        <small style="font-size:8px">Not seen</small>
+                                    }
+                                </small>
+                            </div>
+
+                        </li>
+                    }
+                }
+            }
+            
+        </ul>
+    </div>
+    <div class="chat-footer">
+        <input type="text" class="form-control" id="textmessage" placeholder="Type a message...">
+        <button class="btn btn-primary ml-1" onclick="SendMessage()">Send</button>
+    </div>
+
+}
